@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타자연습 🎀</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Pretendard, Nanum Gothic Coding, Nanum Myeongjo, Gaegu & D2Coding Fonts -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&family=Nanum+Myeongjo:wght@400;700&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/joungkyun/font-d2coding/d2coding.css">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- PDF.js for PDF Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+                        mono: ['Nanum Gothic Coding', 'monospace'],
+                    },
+                    colors: {
+                        pink: {
+                            20: '#FFF8FA',
+                            50: '#FFF0F5',  
+                            100: '#FFE4E1', 
+                            200: '#FFC0CB', 
+                            300: '#FFB6C1', 
+                            400: '#FF8DA1',
+                            500: '#FF69B4', 
+                            600: '#F05398',
+                            700: '#D8387F',
+                        },
+                        lavender: {
+                            50: '#FAF5FF',
+                            100: '#F3E8FF',
+                            200: '#E9D5FF',
+                            400: '#C084FC',
+                            500: '#A855F7',
+                        }
+                    },
+                    boxShadow: {
+                        'soft-pink': '0 10px 30px -5px rgba(255, 182, 193, 0.4), 0 4px 12px -2px rgba(255, 105, 180, 0.15)',
+                        'inner-pink': 'inset 0 2px 8px 0 rgba(255, 182, 193, 0.3)',
+                        'glow': '0 0 18px rgba(255, 105, 180, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 40%, #F3E8FF 100%);
+            background-attachment: fixed;
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        .animate-heart {
+            animation: heartPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pinkBlink {
+            0%, 100% { opacity: 1; background-color: #FF69B4; color: white; }
+            50% { opacity: 0.4; background-color: #FFB6C1; color: white; }
+        }
+        .caret-pink {
+            animation: pinkBlink 0.9s infinite;
+            border-radius: 4px;
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.6);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .char-box {
+            display: inline-block;
+            position: relative;
+            box-sizing: border-box;
+            border-radius: 4px;
+            transition: background-color 0.1s ease, color 0.1s ease;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFF0F5;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFB6C1;
+            border-radius: 10px;
+            border: 2px solid #FFF0F5;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FF69B4;
+        }
+    </style>
+</head>
+<body class="text-slate-700 font-sans min-h-screen flex flex-col justify-between selection:bg-pink-200 selection:text-pink-700 relative overflow-x-hidden">
+
+    <!-- Decorative Background Elements -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute top-10 left-[8%] text-pink-300 text-3xl opacity-60 animate-float" style="animation-delay: 0s;">🌸</div>
+        <div class="absolute top-28 right-[12%] text-pink-400 text-2xl opacity-70 animate-float" style="animation-delay: 1s;">✨</div>
+        <div class="absolute bottom-20 left-[5%] text-pink-300 text-4xl opacity-50 animate-float" style="animation-delay: 2s;">💖</div>
+        <div class="absolute bottom-32 right-[8%] text-pink-300 text-3xl opacity-60 animate-float" style="animation-delay: 1.5s;">🎀</div>
+        <div class="absolute top-1/2 left-[2%] text-lavender-400 text-2xl opacity-40 animate-float" style="animation-delay: 0.5s;">☁️</div>
+        <div class="absolute top-1/3 right-[3%] text-pink-300 text-2xl opacity-50 animate-float" style="animation-delay: 2.5s;">🌷</div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="relative z-10 pt-6 pb-2 px-4">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 bg-white/80 backdrop-blur-md border-2 border-white rounded-3xl p-4 sm:px-6 shadow-soft-pink">
+            
+            <!-- Logo Section -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-gradient-to-tr from-pink-400 to-pink-300 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md shadow-pink-200 animate-heart">
+                    ⌨️
+                </div>
+                <div>
+                    <h1 class="font-bold text-xl sm:text-2xl text-pink-600 tracking-tight">타자연습</h1>
+                </div>
+            </div>
+
+            <!-- Header Stats & Settings -->
+            <div class="flex items-center gap-1.5 sm:gap-2.5 text-xs sm:text-sm font-bold flex-wrap justify-end">
+                <div class="bg-pink-50/90 border border-pink-200/80 px-2.5 py-1.5 rounded-2xl text-pink-600 flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-regular fa-clock text-pink-400"></i>
+                    <span id="stat-time" class="font-mono text-xs sm:text-base">00:00</span>
+                </div>
+                <div class="bg-pink-50/90 border border-pink-200/80 px-2.5 py-1.5 rounded-2xl text-pink-600 flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-bolt text-pink-500"></i>
+                    <span id="stat-cpm" class="font-mono text-xs sm:text-base">0 CPM</span>
+                </div>
+                <div class="bg-pink-50/90 border border-pink-200/80 px-2.5 py-1.5 rounded-2xl text-pink-600 flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-heart text-pink-400"></i>
+                    <span id="stat-accuracy" class="font-mono text-xs sm:text-base">100%</span>
+                </div>
+
+                <!-- 언어 토글 버튼 -->
+                <button id="btn-lang-toggle" title="언어 변경 (한국어 / English)" class="px-2.5 py-1.5 rounded-2xl bg-pink-100 hover:bg-pink-200 text-pink-600 transition-all border border-pink-200 flex items-center gap-1 text-xs">
+                    <span id="lang-flag">🇰🇷</span>
+                    <span id="lang-label" class="font-bold">한국어</span>
+                </button>
+
+                <!-- 폰트 설정 버튼 -->
+                <button id="btn-open-font-modal" title="글꼴(폰트) 설정" class="w-9 h-9 rounded-2xl bg-pink-100 hover:bg-pink-200 text-pink-600 flex items-center justify-center transition-all border border-pink-200 text-xs">
+                    <i class="fa-solid fa-font"></i>
+                </button>
+
+                <!-- 타이핑 기록 내역 버튼 -->
+                <button id="btn-open-history-modal" title="연습 기록 내역" class="w-9 h-9 rounded-2xl bg-pink-100 hover:bg-pink-200 text-pink-600 flex items-center justify-center transition-all border border-pink-200 text-xs">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </button>
+
+                <!-- 카테고리 관리 버튼 -->
+                <button id="btn-open-category-modal" title="카테고리 관리" class="w-9 h-9 rounded-2xl bg-pink-100 hover:bg-pink-200 text-pink-600 flex items-center justify-center transition-all border border-pink-200 text-xs">
+                    <i class="fa-solid fa-folder-plus"></i>
+                </button>
+
+                <!-- 소리 설정 버튼 -->
+                <button id="btn-sound-toggle" title="소리 설정" class="w-9 h-9 rounded-2xl bg-pink-100 hover:bg-pink-200 text-pink-600 flex items-center justify-center transition-all border border-pink-200 text-xs">
+                    <i id="sound-icon" class="fa-solid fa-volume-high text-xs"></i>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="relative z-10 max-w-4xl mx-auto px-4 py-4 flex-1 w-full flex flex-col gap-5">
+
+        <!-- Selector Box -->
+        <section class="glass-card rounded-3xl p-5 shadow-soft-pink transition-all">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-pink-600 font-bold">연습 모드</span>
+                    <div class="inline-flex p-1 bg-pink-100/70 rounded-2xl border border-pink-200/60" id="mode-buttons">
+                        <button data-mode="preset" class="px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-xl bg-white text-pink-600 shadow-sm transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-book-open"></i> 이야기 선택
+                        </button>
+                        <button data-mode="custom" class="px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-xl text-pink-400 hover:text-pink-600 transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-keyboard"></i> 직접 입력
+                        </button>
+                        <button data-mode="file" class="px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-xl text-pink-400 hover:text-pink-600 transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-pdf"></i> PDF / 파일 첨부
+                        </button>
+                    </div>
+                </div>
+
+                <button id="btn-restart" class="px-4 py-1.5 text-xs sm:text-sm font-bold text-pink-600 bg-pink-100/80 hover:bg-pink-200 rounded-2xl border border-pink-200 flex items-center gap-1.5 shadow-sm active:scale-95 transition-all">
+                    <i class="fa-solid fa-rotate-right"></i> 다시 시작 (ESC)
+                </button>
+            </div>
+
+            <!-- Preset Controls -->
+            <div id="section-preset" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                    <label class="block text-xs font-bold text-pink-400 mb-1">카테고리</label>
+                    <select id="preset-category" class="w-full bg-white/90 border-2 border-pink-200 rounded-2xl px-3 py-2 text-xs sm:text-sm font-sans text-slate-700 focus:outline-none focus:border-pink-400 transition-all shadow-inner-pink">
+                    </select>
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block text-xs font-bold text-pink-400 mb-1">이야기 선택 (줄글)</label>
+                    <select id="preset-item" class="w-full bg-white/90 border-2 border-pink-200 rounded-2xl px-3 py-2 text-xs sm:text-sm font-sans text-slate-700 focus:outline-none focus:border-pink-400 transition-all shadow-inner-pink">
+                    </select>
+                </div>
+            </div>
+
+            <!-- Custom Input Controls -->
+            <div id="section-custom" class="hidden flex-col gap-2">
+                <div class="flex justify-between items-center">
+                    <label class="block text-xs font-bold text-pink-400">연습하고 싶은 줄글 / 문장 직접 입력</label>
+                    <span id="custom-char-count" class="text-[11px] font-mono text-pink-400 font-bold">0자</span>
+                </div>
+                <textarea id="custom-text-input" rows="4" placeholder="연습하고 싶은 소설의 한 구절, 에세이, 노래 가사 또는 긴 글을 자유롭게 붙여넣으세요." class="w-full p-3.5 bg-white/90 border-2 border-pink-200 rounded-2xl text-xs sm:text-sm font-sans focus:outline-none focus:border-pink-400 transition-all shadow-inner-pink resize-y"></textarea>
+                <div class="flex justify-end">
+                    <button id="btn-apply-custom" class="px-5 py-2.5 bg-gradient-to-r from-pink-400 to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-md shadow-pink-200 transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-play text-xs"></i> 이 줄글로 연습 시작
+                    </button>
+                </div>
+            </div>
+
+            <!-- File Upload Controls -->
+            <div id="section-file" class="hidden flex-col gap-3">
+                <div class="border-2 border-dashed border-pink-300 hover:border-pink-500 rounded-3xl p-6 bg-pink-50/50 hover:bg-pink-100/40 transition-all text-center cursor-pointer relative" id="drop-zone">
+                    <input type="file" id="file-input" accept=".pdf,.txt" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                    <div class="flex flex-col items-center gap-2 pointer-events-none">
+                        <div class="w-12 h-12 rounded-2xl bg-white shadow-sm border border-pink-200 flex items-center justify-center text-pink-500 text-2xl animate-bounce">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-pink-600">PDF 또는 텍스트(.txt) 파일을 끌어다 놓으세요</p>
+                            <p class="text-xs text-pink-400 mt-0.5">또는 여기를 클릭하여 파일 선택 (PDF 텍스트 자동 추출)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 파일 추출 내용 영역 -->
+                <div id="file-extracted-area" class="hidden flex-col gap-2">
+                    <div class="flex items-center justify-between text-xs font-bold text-pink-600 bg-white/90 p-2.5 px-4 rounded-2xl border border-pink-200 shadow-sm">
+                        <div class="flex items-center gap-2 truncate">
+                            <i class="fa-solid fa-file-lines text-pink-400"></i>
+                            <span id="file-name" class="truncate font-sans max-w-[220px] sm:max-w-[360px]">파일명.pdf</span>
+                        </div>
+                        <span id="file-char-count" class="text-pink-400 font-mono text-[11px] whitespace-nowrap">0자</span>
+                    </div>
+
+                    <label class="block text-xs font-bold text-pink-400">추출된 줄글 미리보기 / 편집</label>
+                    <textarea id="file-extracted-text" rows="5" class="w-full p-3.5 bg-white/90 border-2 border-pink-200 rounded-2xl text-xs sm:text-sm font-sans focus:outline-none focus:border-pink-400 transition-all shadow-inner-pink resize-y" placeholder="추출된 텍스트가 여기에 표시됩니다. 필요시 원하는 부분만 남기고 편집할 수 있습니다."></textarea>
+
+                    <div class="flex justify-between items-center gap-2">
+                        <button id="btn-ai-process" type="button" class="px-3 py-2 bg-pink-100 hover:bg-pink-200 text-pink-600 rounded-xl text-[10px] font-bold shadow-sm transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-robot text-xs"></i> AI로 정리하기
+                        </button>
+                        <div class="flex gap-2">
+                            <button id="btn-reupload-file" type="button" class="text-xs text-pink-400 hover:text-pink-600 font-bold underline px-2 py-1">
+                                <i class="fa-solid fa-arrow-rotate-left"></i> 다른 파일 선택
+                            </button>
+                            <button id="btn-apply-file" type="button" class="px-5 py-2.5 bg-gradient-to-r from-pink-400 to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white rounded-2xl text-xs sm:text-sm font-bold shadow-md shadow-pink-200 transition-all flex items-center gap-1.5">
+                                <i class="fa-solid fa-play text-xs"></i> 이 내용으로 연습 시작
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Typing Area Container -->
+        <section class="glass-card rounded-3xl p-6 sm:p-8 shadow-soft-pink flex flex-col gap-5 relative border-4 border-white">
+            
+            <div id="focus-overlay" class="absolute inset-0 bg-pink-100/30 backdrop-blur-[3px] rounded-3xl z-20 flex items-center justify-center cursor-pointer transition-opacity">
+                <div class="bg-white/95 border-2 border-pink-300 px-6 py-3.5 rounded-3xl shadow-xl flex items-center gap-3 text-pink-600 font-bold text-base sm:text-lg">
+                    <span>클릭하여 연습을 시작하세요</span>
+                </div>
+            </div>
+
+            <!-- 현재 줄글 정보 바 -->
+            <div class="flex items-center justify-between text-xs font-bold text-pink-500 border-b border-pink-100 pb-2">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-pink-400 animate-ping"></span>
+                    <span id="current-story-title" class="truncate max-w-[240px] sm:max-w-md font-sans">이야기 제목</span>
+                </div>
+                <div class="flex items-center gap-2 font-mono text-[11px] text-pink-400">
+                    <span id="current-story-chars">0자</span>
+                </div>
+            </div>
+
+            <div id="typing-display-container" class="min-h-[180px] max-h-[290px] overflow-y-auto p-5 sm:p-6 bg-white/80 border-2 border-pink-200 rounded-2xl font-mono text-base sm:text-lg leading-loose tracking-wide select-none break-words whitespace-pre-wrap shadow-inner-pink">
+                <div id="typing-display" class="w-full"></div>
+            </div>
+
+            <textarea id="hidden-input" class="sr-only" autocomplete="off" capitalize="off" spellcheck="false"></textarea>
+
+            <!-- Progress Bar -->
+            <div class="space-y-1">
+                <div class="flex justify-between items-center text-xs font-bold text-pink-400">
+                    <span>진행률</span>
+                    <span id="detail-progress" class="font-mono text-pink-600 text-sm">0%</span>
+                </div>
+                <div class="w-full bg-pink-100/80 rounded-full h-3.5 p-0.5 border border-pink-200 relative overflow-hidden shadow-inner">
+                    <div id="progress-bar" class="bg-gradient-to-r from-pink-300 via-pink-400 to-pink-500 h-full rounded-full w-0 transition-all duration-200"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <section class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="glass-card p-4 rounded-3xl shadow-sm border border-pink-100 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+                <span class="text-xs text-pink-400 font-bold">경과 시간</span>
+                <div class="flex items-baseline justify-between mt-1">
+                    <span id="detail-time" class="text-2xl font-bold font-mono text-pink-600">00:00</span>
+                    <i class="fa-solid fa-stopwatch text-pink-200 text-lg"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-4 rounded-3xl shadow-sm border border-pink-100 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+                <span class="text-xs text-pink-400 font-bold">WPM (단어/분)</span>
+                <div class="flex items-baseline justify-between mt-1">
+                    <span id="detail-wpm" class="text-2xl font-bold font-mono text-pink-600">0</span>
+                    <i class="fa-solid fa-feather-pointed text-pink-200 text-lg"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-4 rounded-3xl shadow-sm border border-pink-100 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+                <span class="text-xs text-pink-400 font-bold">오타 수</span>
+                <div class="flex items-baseline justify-between mt-1">
+                    <span id="detail-errors" class="text-2xl font-bold font-mono text-rose-400">0</span>
+                    <i class="fa-solid fa-heart-crack text-rose-200 text-lg"></i>
+                </div>
+            </div>
+
+            <div class="glass-card p-4 rounded-3xl shadow-sm border border-pink-100 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+                <span class="text-xs text-pink-400 font-bold">입력 글자 수</span>
+                <div class="flex items-baseline justify-between mt-1">
+                    <span id="detail-chars" class="text-xl font-bold font-mono text-pink-600">0 / 0</span>
+                    <i class="fa-solid fa-pen-nib text-pink-200 text-lg"></i>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="relative z-10 py-4 text-center text-xs text-pink-400 font-medium">
+        Typing Practice
+    </footer>
+
+    <!-- Font Settings Modal -->
+    <div id="font-modal" class="fixed inset-0 bg-pink-950/30 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border-2 border-pink-200 transform scale-95 transition-all duration-300 relative flex flex-col gap-4">
+            <div class="flex justify-between items-center pb-3 border-b border-pink-100">
+                <h3 class="text-lg font-bold text-pink-600 flex items-center gap-2">
+                    <span>🔤</span> 글꼴(폰트) 설정
+                </h3>
+                <button id="btn-close-font-modal" class="text-pink-300 hover:text-pink-600 text-xl font-bold">
+                    &times;
+                </button>
+            </div>
+
+            <!-- 폰트 패밀리 선택 -->
+            <div>
+                <label class="block text-xs font-bold text-pink-400 mb-2">폰트 종류</label>
+                <div class="grid grid-cols-2 gap-2" id="font-family-options">
+                    <button type="button" data-font="Nanum Gothic Coding" class="font-btn p-2.5 rounded-2xl border-2 border-pink-400 bg-pink-50 text-pink-600 font-bold text-xs text-left transition-all" style="font-family: 'Nanum Gothic Coding', monospace;">
+                        나눔고딕 코딩 (기본)
+                    </button>
+                    <button type="button" data-font="Pretendard" class="font-btn p-2.5 rounded-2xl border-2 border-pink-200 hover:border-pink-300 bg-white text-slate-700 text-xs text-left transition-all font-sans">
+                        프리텐다드 (고딕)
+                    </button>
+                    <button type="button" data-font="Nanum Myeongjo" class="font-btn p-2.5 rounded-2xl border-2 border-pink-200 hover:border-pink-300 bg-white text-slate-700 text-xs text-left transition-all" style="font-family: 'Nanum Myeongjo', serif;">
+                        나눔명조 (소설/문학)
+                    </button>
+                    <button type="button" data-font="D2Coding" class="font-btn p-2.5 rounded-2xl border-2 border-pink-200 hover:border-pink-300 bg-white text-slate-700 text-xs text-left transition-all" style="font-family: 'D2Coding', monospace;">
+                        D2Coding (코딩용)
+                    </button>
+                    <button type="button" data-font="Gaegu" class="font-btn p-2.5 rounded-2xl border-2 border-pink-200 hover:border-pink-300 bg-white text-slate-700 text-xs text-left transition-all col-span-2" style="font-family: 'Gaegu', cursive;">
+                        개구체 (따뜻한 손글씨)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 폰트 크기 선택 -->
+            <div>
+                <label class="block text-xs font-bold text-pink-400 mb-2">폰트 크기</label>
+                <div class="grid grid-cols-3 gap-2" id="font-size-options">
+                    <button type="button" data-size="text-base" class="size-btn py-2 rounded-xl border border-pink-200 hover:border-pink-400 text-xs font-bold transition-all">작게 (16px)</button>
+                    <button type="button" data-size="text-lg" class="size-btn py-2 rounded-xl border-2 border-pink-400 bg-pink-50 text-pink-600 text-xs font-bold transition-all">보통 (18px)</button>
+                    <button type="button" data-size="text-xl" class="size-btn py-2 rounded-xl border border-pink-200 hover:border-pink-400 text-xs font-bold transition-all">크게 (20px)</button>
+                </div>
+            </div>
+
+            <!-- 미리보기 -->
+            <div>
+                <label class="block text-xs font-bold text-pink-400 mb-1">미리보기</label>
+                <div id="font-preview-box" class="p-3.5 bg-pink-50/70 border border-pink-200 rounded-2xl text-slate-700 text-sm leading-relaxed" style="font-family: 'Nanum Gothic Coding', monospace;">
+                    다람쥐 헌 쳇바퀴에 타고파. The quick brown fox jumps over the lazy dog.
+                </div>
+            </div>
+
+            <button id="btn-save-font" class="w-full py-2.5 bg-gradient-to-r from-pink-400 to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white rounded-xl text-xs font-bold shadow-md shadow-pink-200 transition-all">
+                설정 완료
+            </button>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="fixed inset-0 bg-pink-950/30 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border-2 border-pink-200 transform scale-95 transition-all duration-300 relative flex flex-col max-h-[85vh]">
+            <div class="flex justify-between items-center pb-3 border-b border-pink-100 mb-3">
+                <h3 class="text-lg font-bold text-pink-600 flex items-center gap-2">
+                    <span>📜</span> 타이핑 연습 기록
+                </h3>
+                <button id="btn-close-history-modal" class="text-pink-300 hover:text-pink-600 text-xl font-bold">
+                    &times;
+                </button>
+            </div>
+
+            <!-- 상단 요약 통계 -->
+            <div class="grid grid-cols-3 gap-2 mb-3">
+                <div class="bg-pink-50/90 p-3 rounded-2xl border border-pink-100 text-center">
+                    <span class="text-[10px] text-pink-400 block font-bold">총 연습 횟수</span>
+                    <span id="history-total-count" class="font-mono text-lg font-bold text-pink-600">0회</span>
+                </div>
+                <div class="bg-pink-50/90 p-3 rounded-2xl border border-pink-100 text-center">
+                    <span class="text-[10px] text-pink-400 block font-bold">최고 타수</span>
+                    <span id="history-best-cpm" class="font-mono text-lg font-bold text-pink-600">0 CPM</span>
+                </div>
+                <div class="bg-pink-50/90 p-3 rounded-2xl border border-pink-100 text-center">
+                    <span class="text-[10px] text-pink-400 block font-bold">평균 정확도</span>
+                    <span id="history-avg-accuracy" class="font-mono text-lg font-bold text-pink-600">0%</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-2 px-1">
+                <span class="text-xs font-bold text-pink-500">최근 연습 내역</span>
+                <button id="btn-clear-history" class="text-[11px] text-rose-400 hover:text-rose-600 underline">기록 전체 삭제</button>
+            </div>
+
+            <!-- 기록 목록 -->
+            <div class="overflow-y-auto space-y-2 pr-1 flex-1 max-h-72" id="history-list-container">
+                <!-- 기록 카드들이 생성되는 곳 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Manager Modal -->
+    <div id="category-modal" class="fixed inset-0 bg-pink-950/30 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border-2 border-pink-200 transform scale-95 transition-all duration-300 relative flex flex-col max-h-[85vh]">
+            <div class="flex justify-between items-center pb-3 border-b border-pink-100 mb-3">
+                <h3 class="text-lg font-bold text-pink-600 flex items-center gap-2">
+                    <span>📂</span> 카테고리 관리
+                </h3>
+                <button id="btn-close-category-modal" class="text-pink-300 hover:text-pink-600 text-xl font-bold">
+                    &times;
+                </button>
+            </div>
+
+            <div class="overflow-y-auto space-y-4 pr-1 flex-1">
+                <!-- 추가 / 수정 폼 -->
+                <div class="bg-pink-50/70 p-4 rounded-2xl border border-pink-100 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 id="cat-form-title" class="text-xs font-bold text-pink-600 flex items-center gap-1.5">
+                            <i class="fa-solid fa-pen-to-square text-pink-400"></i> 새 카테고리 추가
+                        </h4>
+                        <button id="btn-cancel-edit-category" class="hidden text-xs text-slate-400 hover:text-pink-600 underline">
+                            수정 취소
+                        </button>
+                    </div>
+                    <input type="hidden" id="editing-cat-key" value="">
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-pink-500 mb-1">카테고리 제목</label>
+                        <input type="text" id="new-cat-title" placeholder="카테고리 제목을 입력하세요" class="w-full px-3 py-2 bg-white border border-pink-200 rounded-xl text-xs font-sans focus:outline-none focus:border-pink-400">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="block text-[11px] font-bold text-pink-500">연습 이야기 / 줄글 목록 (칸별로 한 편씩)</label>
+                            <span class="text-[10px] text-pink-400 font-sans" id="sentence-count-badge">0개 이야기</span>
+                        </div>
+                        <div id="sentence-inputs-container" class="space-y-2 max-h-56 overflow-y-auto pr-1">
+                            <!-- 동적 문장 입력칸들이 생성되는 공간 -->
+                        </div>
+                        <button type="button" id="btn-add-sentence-row" class="mt-2 w-full py-2 bg-white hover:bg-pink-100/70 text-pink-600 rounded-xl text-xs font-bold border border-pink-200 flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-98">
+                            <i class="fa-solid fa-plus text-pink-400"></i> 이야기 칸 추가하기
+                        </button>
+                    </div>
+
+                    <button id="btn-add-category" class="w-full py-2.5 bg-gradient-to-r from-pink-400 to-pink-500 hover:from-pink-500 hover:to-pink-600 text-white rounded-xl text-xs font-bold shadow-md shadow-pink-200 transition-all flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-check"></i> <span id="btn-save-text">카테고리 저장</span>
+                    </button>
+                </div>
+
+                <!-- 등록된 카테고리 목록 -->
+                <div>
+                    <h4 class="text-xs font-bold text-pink-400 mb-2">등록된 카테고리 목록</h4>
+                    <div id="custom-category-list" class="space-y-2">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="result-modal" class="fixed inset-0 bg-pink-950/30 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border-4 border-pink-200 transform scale-90 transition-all duration-300 text-center relative overflow-hidden" id="result-card">
+            
+            <div class="w-20 h-20 bg-gradient-to-tr from-pink-300 to-pink-400 text-white rounded-full flex items-center justify-center text-4xl mx-auto mb-3 shadow-lg shadow-pink-200 animate-bounce">
+                🎉
+            </div>
+
+            <h2 class="text-2xl font-bold text-pink-600 mb-1">연습 완료!</h2>
+            <p class="text-xs text-pink-400 mb-6 font-sans">결과 기록입니다.</p>
+
+            <div class="grid grid-cols-2 gap-3 mb-6 font-mono">
+                <div class="bg-pink-50 p-3 rounded-2xl border border-pink-100">
+                    <span class="text-xs font-sans text-pink-400 block mb-1">타수 (CPM)</span>
+                    <span id="result-cpm" class="text-2xl font-bold text-pink-600">0</span>
+                </div>
+                <div class="bg-pink-50 p-3 rounded-2xl border border-pink-100">
+                    <span class="text-xs font-sans text-pink-400 block mb-1">단어속도 (WPM)</span>
+                    <span id="result-wpm" class="text-2xl font-bold text-pink-500">0</span>
+                </div>
+                <div class="bg-pink-50 p-3 rounded-2xl border border-pink-100">
+                    <span class="text-xs font-sans text-pink-400 block mb-1">정확도</span>
+                    <span id="result-accuracy" class="text-2xl font-bold text-lavender-500">0%</span>
+                </div>
+                <div class="bg-pink-50 p-3 rounded-2xl border border-pink-100">
+                    <span class="text-xs font-sans text-pink-400 block mb-1">소요 시간</span>
+                    <span id="result-time" class="text-2xl font-bold text-slate-700">00:00</span>
+                </div>
+            </div>
+
+            <!-- 자동 이동 카운트다운 알림 바 -->
+            <div class="mb-4 py-2.5 px-3 bg-pink-50 rounded-2xl border border-pink-200/90 text-xs text-pink-600 font-bold flex items-center justify-center gap-2 shadow-inner">
+                <i class="fa-solid fa-circle-notch fa-spin text-pink-400"></i>
+                <span id="auto-next-countdown">2초 후 다음 글로 자동 이동...</span>
+            </div>
+
+            <div class="flex gap-2">
+                <button id="btn-modal-next" class="flex-1 py-3.5 bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:from-pink-500 hover:to-pink-700 text-white font-bold text-base rounded-2xl shadow-lg shadow-pink-200 transition-all flex items-center justify-center gap-2 active:scale-95">
+                    <span>다음 글로 이동</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+                <button id="btn-modal-retry" class="px-4 py-3.5 bg-pink-100/90 hover:bg-pink-200 text-pink-600 font-bold text-sm rounded-2xl border border-pink-200 transition-all active:scale-95" title="현재 글 다시 연습">
+                    다시하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script>
+        // ==========================================
+        // 1. 프리셋 데이터 (한국어/영어 통합 및 10개 카테고리 구성)
+        // ==========================================
+        const PRESETS = {
+            'it-tech': {
+                name: "💻 최신 IT 이슈 및 기술",
+                items: [
+                    {
+                        title: "생성형 AI의 발전과 미래",
+                        ko: "인공지능 기술이 일상과 산업 전반에 빠르게 스며들며 새로운 패러다임을 열고 있습니다. 과거 단순 반복 업무를 보조하던 수준을 넘어, 이제는 문학과 예술 창작, 복잡한 데이터 분석까지 돕는 능동적 파트너로 진화했습니다.",
+                        en: "Artificial intelligence technology is rapidly permeating daily life and industries, opening a new paradigm. Beyond just assisting with simple repetitive tasks in the past, it has now evolved into an active partner that helps with literary and artistic creation, and even complex data analysis."
+                    },
+                    {
+                        title: "양자 컴퓨터의 가능성",
+                        ko: "눈에 보이지 않는 미시 세계를 지배하는 양자역학은 슈퍼컴퓨터로도 수만 년이 걸릴 연산을 단 몇 초 만에 해결할 잠재력을 품고 있습니다. 원자 수준의 입자 상태를 활용한 양자 컴퓨터는 미래 연산 기술의 핵심입니다.",
+                        en: "Quantum mechanics, which governs the invisible microscopic world, holds the potential to solve calculations that would take supercomputers tens of thousands of years in just a few seconds. Quantum computers, which utilize the state of particles at the atomic level, are the core of future computing technology."
+                    }
+                ]
+            },
+            'world-classics': {
+                name: "🌍 세계 명작 문학",
+                items: [
+                    {
+                        title: "어린 왕자와 관계의 의미",
+                        ko: "여우가 어린 왕자에게 말했습니다. 길들인다는 것은 관계를 맺는다는 뜻이야. 네가 나를 길들인다면 우리는 서로에게 이 세상에서 오직 하나뿐인 존재가 될 거야.",
+                        en: "The fox said to the Little Prince. To tame means to establish a relationship. If you tame me, we will be the only one in the world to each other."
+                    },
+                    {
+                        title: "위대한 개츠비와 희망",
+                        ko: "개츠비는 초록 불빛을 믿었습니다. 그 불빛은 매년 우리 앞쪽으로 멀어지는 환상적인 미래를 상징했습니다. 우리는 내일 더 빨리 달리고 더 멀리 팔을 뻗을 것입니다.",
+                        en: "Gatsby believed in the green light, the orgastic future that year by year recedes before us. It eluded us then, but that's no matter—tomorrow we will run faster, stretch out our arms farther."
+                    }
+                ]
+            },
+            'science': {
+                name: "🔭 흥미로운 과학 이야기",
+                items: [
+                    {
+                        title: "제임스 웹 망원경",
+                        ko: "제임스 웹 우주망원경은 거대한 금빛 거울과 적외선 감지기를 통해 우주 대폭발 직후 탄생한 가장 원초적인 은하들의 빛을 포착해냅니다. 짙은 성간 먼지 구름 너머 아기 별들의 탄생은 경이로움 그 자체입니다.",
+                        en: "The James Webb Space Telescope uses its massive golden mirrors and infrared sensors to capture the light of the most primordial galaxies born immediately after the Big Bang. The birth of baby stars beyond thick interstellar dust clouds is a wonder in itself."
+                    },
+                    {
+                        title: "인간 뇌의 가소성",
+                        ko: "인간의 뇌는 새로운 배움과 경험을 마주할 때마다 끊임없이 신경세포 사이의 시냅스를 재구성하고 회로를 만들어냅니다. 배움에는 결코 늦은 때가 없음을 뇌과학이 증명하고 있습니다.",
+                        en: "The human brain is constantly restructuring synapses between neurons and forming circuits whenever it encounters new learning and experiences. Neuroscience proves that it is never too late to learn."
+                    }
+                ]
+            },
+            'math': {
+                name: "📐 신비로운 수학 세계",
+                items: [
+                    {
+                        title: "오일러 공식",
+                        ko: "수학에서 가장 아름다운 공식으로 꼽히는 오일러의 등식은 자연상수, 허수 단위, 원주율, 그리고 숫자 1과 0이 우아하게 결합되어 서로 다른 수학적 우주들이 하나로 연결됨을 보여줍니다.",
+                        en: "Euler's identity, considered the most beautiful formula in mathematics, elegantly combines the natural constant, the imaginary unit, pi, and the numbers 1 and 0, showing that different mathematical universes are connected as one."
+                    },
+                    {
+                        title: "피보나치수열과 황금비",
+                        ko: "해바라기 씨앗의 배열이나 앵무조개의 곡선 속에는 피보나치수열이라는 숫자의 리듬이 숨어있습니다. 자연은 가장 효율적인 성장을 위해 아름다운 황금비를 스스로 선택했습니다.",
+                        en: "In the arrangement of sunflower seeds or the curves of a nautilus shell, the rhythm of numbers called the Fibonacci sequence is hidden. Nature has chosen the beautiful golden ratio itself for the most efficient growth."
+                    }
+                ]
+            },
+            'korean-classics': {
+                name: "📖 한국 문학 명작",
+                items: [
+                    {
+                        title: "황순원의 소나기",
+                        ko: "소년은 개울가에서 소녀를 보았습니다. 서울서는 이런 개울물을 보지 못했는가 보았다며 소녀는 물장난을 쳤습니다. 소녀가 던진 갈꽃 냄새 나는 조약돌을 쥐고 소년은 가슴이 설렜습니다.",
+                        en: "The boy saw the girl by the stream. The girl splashed in the water, as if she had never seen such stream water in Seoul. Holding the reed-scented pebble thrown by the girl, the boy's heart fluttered."
+                    },
+                    {
+                        title: "이상의 날개",
+                        ko: "박제가 되어버린 천재를 아시오? 나는 유쾌하오. 육신이 피로할 때 정신은 은화처럼 맑아집니다. 날개야 다시 돋아라. 한 번만 더 날아보자꾸나.",
+                        en: "Do you know of a genius who has become a stuffed specimen? I am cheerful. When the body is tired, the mind becomes as clear as a silver coin. Wings, grow again. Let's fly just one more time."
+                    }
+                ]
+            },
+            'healing-essays': {
+                name: "🌿 마음을 달래는 에세이",
+                items: [
+                    {
+                        title: "숲속 오두막의 아침",
+                        ko: "새벽안개가 걷히는 숲속은 세상에서 가장 평화로운 숨을 쉽니다. 따뜻한 차 한 잔을 내리고 창밖의 푸른 나무들을 바라보는 고요한 순간, 복잡했던 마음의 소음들이 사라집니다.",
+                        en: "The forest where the morning mist lifts breathes the most peaceful breath in the world. In the quiet moment of pouring a warm cup of tea and looking at the green trees outside the window, the complex noises of the heart disappear."
+                    },
+                    {
+                        title: "가을 은행나무 길",
+                        ko: "노랗게 물든 은행잎들이 바람을 타고 황금빛 눈처럼 흩날리는 계절입니다. 낙엽을 밟으며 비워내야만 새로운 생명을 품을 수 있다는 자연의 순리를 깨닫습니다.",
+                        en: "It is the season when yellow ginkgo leaves flutter like golden snow on the wind. Stepping on the fallen leaves, I realize the natural truth that one must empty oneself to harbor new life."
+                    }
+                ]
+            },
+            'cinema': {
+                name: "🎬 영화와 명연설",
+                items: [
+                    {
+                        title: "어바웃 타임의 교훈",
+                        ko: "오늘이라는 평범한 하루는 사실 우리가 다시는 돌아올 수 없는 가장 소중한 기적입니다. 나는 매일을 살아가려고 노력합니다. 특별한 인생의 마지막 날로 다시 돌아온 것처럼 즐기면서요.",
+                        en: "The ordinary day called today is actually the most precious miracle we can never return to. I try to live every day. Enjoying it as if I had returned to the last day of a special life."
+                    },
+                    {
+                        title: "스티브 잡스의 갈망",
+                        ko: "여러분의 시간은 한정되어 있습니다. 다른 사람의 삶을 사느라 시간을 낭비하지 마십시오. 가슴과 직관을 따를 용기를 가지세요. 늘 갈망하고, 우직하게 나아가십시오.",
+                        en: "Your time is limited, so don't waste it living someone else's life. Have the courage to follow your heart and intuition. Always stay hungry, always foolish."
+                    }
+                ]
+            },
+            'fairy-tales': {
+                name: "🧸 동화와 우화",
+                items: [
+                    {
+                        title: "행복한 왕자의 선물",
+                        ko: "행복한 왕자는 몸의 순금 잎사귀와 눈의 사파이어를 가난한 이들에게 나누어 주었습니다. 겉모습보다 마음의 풍요가 진정한 행복임을 이야기합니다.",
+                        en: "The Happy Prince shared the pure gold leaves of his body and the sapphires of his eyes with the poor. It tells that inner abundance is true happiness, rather than outward appearance."
+                    },
+                    {
+                        title: "미운 아기 오리의 비상",
+                        ko: "모진 겨울이 지나고 따스한 봄 햇살이 호수를 비출 때, 아기 오리는 물 위에 비친 자신을 보았습니다. 그는 가장 눈부신 백조로 자라 있었습니다.",
+                        en: "When the harsh winter passed and the warm spring sunlight shone on the lake, the ugly duckling saw himself reflected in the water. He had grown into the most dazzling swan."
+                    }
+                ]
+            },
+            'self-development': {
+                name: "💡 자기계발과 명언",
+                items: [
+                    {
+                        title: "시간 관리의 기술",
+                        ko: "어제는 역사이고 내일은 미스터리입니다. 하지만 오늘은 선물입니다. 그렇기 때문에 오늘을 '현재'라고 부릅니다. 지금 당장 당신이 할 수 있는 일에 집중하십시오.",
+                        en: "Yesterday is history, tomorrow is a mystery, but today is a gift. That is why it is called the 'present'. Focus on what you can do right now."
+                    },
+                    {
+                        title: "성공과 실패",
+                        ko: "성공은 끝이 아니며, 실패는 치명적인 것이 아닙니다. 정말 중요한 것은 계속해서 앞으로 나아가는 용기입니다. 오늘보다 더 나은 내일을 믿으십시오.",
+                        en: "Success is not final, failure is not fatal: it is the courage to continue that counts. Believe in a better tomorrow than today."
+                    }
+                ]
+            },
+            'history': {
+                name: "📜 역사가 남긴 지혜",
+                items: [
+                    {
+                        title: "문명의 교훈",
+                        ko: "역사는 과거와 현재의 끊임없는 대화입니다. 수많은 문명이 흥망성쇠를 거치며 남긴 지혜는 오늘날 우리에게 큰 영감이 됩니다. 과거를 통해 현재를 통찰하고 미래를 준비합니다.",
+                        en: "History is an endless dialogue between the past and the present. The wisdom left behind by numerous civilizations as they rose and fell is a great inspiration to us today. Through the past, we gain insight into the present and prepare for the future."
+                    },
+                    {
+                        title: "도전의 역사",
+                        ko: "인류의 역사는 곧 도전의 역사였습니다. 대항해 시대의 모험가들이나 산업혁명을 이끈 공학자들처럼, 한계를 돌파하려는 의지가 인류의 지평을 넓혀왔습니다.",
+                        en: "Human history has been a history of challenges. Like the adventurers of the Age of Discovery or the engineers who led the Industrial Revolution, the will to break through limits has expanded the horizons of humanity."
+                    }
+                ]
+            }
+        };
+
+        // ==========================================
+        // 2. 상태 관리 (언어, 폰트, 카테고리, 연습 상태)
+        // ==========================================
+        let currentLang = 'ko';
+        let categories = { ...PRESETS }; // 통합된 카테고리
+        let currentFontFamily = 'Nanum Gothic Coding';
+        let currentFontSize = 'text-lg';
+
+        let targetText = "";
+        let typedText = "";
+        let startTime = null;
+        let timerInterval = null;
+        let isCompleted = false;
+        let errorCount = 0;
+        let lastLength = 0;
+
+        // DOM 요소 참조
+        const displayContainer = document.getElementById('typing-display-container');
+        const typingDisplay = document.getElementById('typing-display');
+        const hiddenInput = document.getElementById('hidden-input');
+        const focusOverlay = document.getElementById('focus-overlay');
+        
+        const statTime = document.getElementById('stat-time');
+        const statCpm = document.getElementById('stat-cpm');
+        const statAccuracy = document.getElementById('stat-accuracy');
+        const progressBar = document.getElementById('progress-bar');
+
+        const detailTime = document.getElementById('detail-time');
+        const detailProgress = document.getElementById('detail-progress');
+        const detailWpm = document.getElementById('detail-wpm');
+        const detailErrors = document.getElementById('detail-errors');
+        const detailChars = document.getElementById('detail-chars');
+
+        const presetCategory = document.getElementById('preset-category');
+        const presetItem = document.getElementById('preset-item');
+        const modeButtons = document.getElementById('mode-buttons');
+        const sectionPreset = document.getElementById('section-preset');
+        const sectionCustom = document.getElementById('section-custom');
+        const sectionFile = document.getElementById('section-file');
+        const customTextInput = document.getElementById('custom-text-input');
+        const customCharCount = document.getElementById('custom-char-count');
+        const btnApplyCustom = document.getElementById('btn-apply-custom');
+        const btnRestart = document.getElementById('btn-restart');
+        const btnSoundToggle = document.getElementById('btn-sound-toggle');
+        const soundIcon = document.getElementById('sound-icon');
+
+        const btnLangToggle = document.getElementById('btn-lang-toggle');
+        const langFlag = document.getElementById('lang-flag');
+        const langLabel = document.getElementById('lang-label');
+
+        const currentStoryTitle = document.getElementById('current-story-title');
+        const currentStoryChars = document.getElementById('current-story-chars');
+
+        const fileInput = document.getElementById('file-input');
+        const dropZone = document.getElementById('drop-zone');
+        const fileExtractedArea = document.getElementById('file-extracted-area');
+        const fileNameEl = document.getElementById('file-name');
+        const fileCharCountEl = document.getElementById('file-char-count');
+        const fileExtractedText = document.getElementById('file-extracted-text');
+        const btnReuploadFile = document.getElementById('btn-reupload-file');
+        const btnApplyFile = document.getElementById('btn-apply-file');
+
+        // Font Modal Elements
+        const fontModal = document.getElementById('font-modal');
+        const btnOpenFontModal = document.getElementById('btn-open-font-modal');
+        const btnCloseFontModal = document.getElementById('btn-close-font-modal');
+        const btnSaveFont = document.getElementById('btn-save-font');
+        const fontFamilyOptions = document.getElementById('font-family-options');
+        const fontSizeOptions = document.getElementById('font-size-options');
+        const fontPreviewBox = document.getElementById('font-preview-box');
+
+        // History Modal Elements
+        const historyModal = document.getElementById('history-modal');
+        const btnOpenHistoryModal = document.getElementById('btn-open-history-modal');
+        const btnCloseHistoryModal = document.getElementById('btn-close-history-modal');
+        const btnClearHistory = document.getElementById('btn-clear-history');
+        const historyTotalCount = document.getElementById('history-total-count');
+        const historyBestCpm = document.getElementById('history-best-cpm');
+        const historyAvgAccuracy = document.getElementById('history-avg-accuracy');
+        const historyListContainer = document.getElementById('history-list-container');
+
+        // Category Modal Elements
+        const categoryModal = document.getElementById('category-modal');
+        const btnOpenCatModal = document.getElementById('btn-open-category-modal');
+        const btnCloseCatModal = document.getElementById('btn-close-category-modal');
+        const btnAddCategory = document.getElementById('btn-add-category');
+        const newCatTitle = document.getElementById('new-cat-title');
+        const sentenceInputsContainer = document.getElementById('sentence-inputs-container');
+        const btnAddSentenceRow = document.getElementById('btn-add-sentence-row');
+        const sentenceCountBadge = document.getElementById('sentence-count-badge');
+        const catFormTitle = document.getElementById('cat-form-title');
+        const editingCatKey = document.getElementById('editing-cat-key');
+        const btnCancelEditCategory = document.getElementById('btn-cancel-edit-category');
+        const btnSaveText = document.getElementById('btn-save-text');
+        const customCategoryList = document.getElementById('custom-category-list');
+
+        // Result Modal Elements
+        const resultModal = document.getElementById('result-modal');
+        const resultCard = document.getElementById('result-card');
+        const btnModalRetry = document.getElementById('btn-modal-retry');
+        const btnModalNext = document.getElementById('btn-modal-next');
+        const autoNextCountdownEl = document.getElementById('auto-next-countdown');
+
+        let autoNextTimeout = null;
+        let autoNextCountdownInterval = null;
+
+        // PDF.js worker 설정
+        if (window.pdfjsLib) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+
+        // ==========================================
+        // 3. 효과음 시스템
+        // ==========================================
+        let soundEnabled = true;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playKeySound(isError = false) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioContext();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (isError) {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.12);
+                } else {
+                    osc.type = 'sine';
+                    const pitch = 440 + Math.random() * 100; 
+                    osc.frequency.setValueAtTime(pitch, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.06);
+                }
+            } catch (e) {}
+        }
+
+        // ==========================================
+        // 4. 언어 설정 & 카테고리 로드
+        // ==========================================
+        function loadLanguage() {
+            const saved = localStorage.getItem('pink_typing_lang');
+            if (saved === 'en' || saved === 'ko') {
+                currentLang = saved;
+            } else {
+                currentLang = 'ko'; // 디폴트는 항상 한국어
+            }
+            updateLanguageUI();
+        }
+
+        function updateLanguageUI() {
+            if (langFlag && langLabel) {
+                if (currentLang === 'ko') {
+                    langFlag.textContent = '🇰🇷';
+                    langLabel.textContent = '한국어';
+                } else {
+                    langFlag.textContent = '🇺🇸';
+                    langLabel.textContent = 'English';
+                }
+            }
+        }
+
+        function toggleLanguage() {
+            currentLang = (currentLang === 'ko') ? 'en' : 'ko';
+            localStorage.setItem('pink_typing_lang', currentLang);
+            updateLanguageUI();
+            // 언어에 맞춰 카테고리/아이템 새로고침
+            populateCategoriesSelect();
+            populatePresetItems();
+            resetPractice();
+        }
+
+        function loadCategories() {
+            // 원본 데이터 PRESETS 사용
+            categories = { ...PRESETS };
+
+            // 커스텀 카테고리 로드
+            const saved = localStorage.getItem('pink_typing_categories');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    for (const key in parsed) {
+                        if (parsed[key].custom) {
+                            categories[key] = parsed[key];
+                        }
+                    }
+                } catch(e) {}
+            }
+        }
+
+        function saveCategories() {
+            let savedCustoms = {};
+            try {
+                const saved = localStorage.getItem('pink_typing_categories');
+                if (saved) savedCustoms = JSON.parse(saved);
+            } catch(e) {}
+
+            for (const key in categories) {
+                if (categories[key].custom) {
+                    savedCustoms[key] = {
+                        ...categories[key],
+                        lang: categories[key].lang || currentLang
+                    };
+                }
+            }
+            localStorage.setItem('pink_typing_categories', JSON.stringify(savedCustoms));
+        }
+
+        // ==========================================
+        // 5. 폰트 직접 설정 관리
+        // ==========================================
+        function loadFontSettings() {
+            const saved = localStorage.getItem('pink_typing_font');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.font) currentFontFamily = parsed.font;
+                    if (parsed.size) currentFontSize = parsed.size;
+                } catch(e) {}
+            }
+            applyFont(currentFontFamily, currentFontSize);
+            updateFontModalUI();
+        }
+
+        function applyFont(font, size) {
+            currentFontFamily = font;
+            currentFontSize = size;
+
+            // 타이핑 뷰에 적용
+            if (typingDisplay) {
+                typingDisplay.style.fontFamily = `"${currentFontFamily}", monospace, sans-serif`;
+                typingDisplay.classList.remove('text-base', 'text-lg', 'text-xl');
+                typingDisplay.classList.add(currentFontSize);
+            }
+            if (displayContainer) {
+                displayContainer.style.fontFamily = `"${currentFontFamily}", monospace, sans-serif`;
+            }
+
+            // 모달 내 미리보기 박스에 적용
+            if (fontPreviewBox) {
+                fontPreviewBox.style.fontFamily = `"${currentFontFamily}", monospace, sans-serif`;
+                fontPreviewBox.classList.remove('text-base', 'text-lg', 'text-xl');
+                fontPreviewBox.classList.add(currentFontSize);
+            }
+        }
+
+        function updateFontModalUI() {
+            const fontBtns = document.querySelectorAll('.font-btn');
+            fontBtns.forEach(btn => {
+                if (btn.dataset.font === currentFontFamily) {
+                    btn.classList.add('border-pink-400', 'bg-pink-50', 'text-pink-600', 'font-bold');
+                    btn.classList.remove('border-pink-200', 'bg-white', 'text-slate-700');
+                } else {
+                    btn.classList.remove('border-pink-400', 'bg-pink-50', 'text-pink-600', 'font-bold');
+                    btn.classList.add('border-pink-200', 'bg-white', 'text-slate-700');
+                }
+            });
+
+            const sizeBtns = document.querySelectorAll('.size-btn');
+            sizeBtns.forEach(btn => {
+                if (btn.dataset.size === currentFontSize) {
+                    btn.classList.add('border-2', 'border-pink-400', 'bg-pink-50', 'text-pink-600');
+                    btn.classList.remove('border-pink-200', 'bg-white', 'text-slate-700');
+                } else {
+                    btn.classList.remove('border-2', 'border-pink-400', 'bg-pink-50', 'text-pink-600');
+                    btn.classList.add('border', 'border-pink-200', 'bg-white', 'text-slate-700');
+                }
+            });
+        }
+
+        function saveFontSettings() {
+            localStorage.setItem('pink_typing_font', JSON.stringify({
+                font: currentFontFamily,
+                size: currentFontSize
+            }));
+        }
+
+        function closeFontModal() {
+            fontModal.classList.add('opacity-0', 'pointer-events-none');
+            fontModal.firstElementChild.classList.remove('scale-100');
+            fontModal.firstElementChild.classList.add('scale-95');
+        }
+
+        // ==========================================
+        // 6. 타이핑 기록 (History) 관리
+        // ==========================================
+        function getHistory() {
+            const saved = localStorage.getItem('pink_typing_history');
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch(e) {
+                    return [];
+                }
+            }
+            return [];
+        }
+
+        function saveHistoryEntry(entry) {
+            const history = getHistory();
+            history.unshift(entry);
+            if (history.length > 60) history.pop();
+            localStorage.setItem('pink_typing_history', JSON.stringify(history));
+        }
+
+        function clearHistory() {
+            if (confirm("정말로 모든 연습 기록을 삭제하시겠습니까?")) {
+                localStorage.removeItem('pink_typing_history');
+                renderHistory();
+            }
+        }
+
+        function deleteHistoryItem(id) {
+            let history = getHistory();
+            history = history.filter(item => item.id !== id);
+            localStorage.setItem('pink_typing_history', JSON.stringify(history));
+            renderHistory();
+        }
+        window.deleteHistoryItem = deleteHistoryItem;
+
+        function renderHistory() {
+            const history = getHistory();
+            if (!historyListContainer) return;
+
+            const total = history.length;
+            historyTotalCount.textContent = `${total}회`;
+
+            if (total === 0) {
+                historyBestCpm.textContent = "0 CPM";
+                historyAvgAccuracy.textContent = "0%";
+                historyListContainer.innerHTML = `
+                    <div class="text-center py-10 text-pink-300 text-xs">
+                        <i class="fa-solid fa-feather text-3xl mb-2 text-pink-200 block"></i>
+                        아직 완료된 연습 기록이 없습니다.<br>이야기를 선택하여 끝까지 타이핑해보세요!
+                    </div>
+                `;
+                return;
+            }
+
+            let bestCpm = 0;
+            let sumAcc = 0;
+
+            history.forEach(item => {
+                if (item.cpm > bestCpm) bestCpm = item.cpm;
+                sumAcc += (item.accuracy || 0);
+            });
+
+            historyBestCpm.textContent = `${bestCpm} CPM`;
+            historyAvgAccuracy.textContent = `${Math.round(sumAcc / total)}%`;
+
+            historyListContainer.innerHTML = history.map(item => {
+                const dateStr = item.date || "";
+                return `
+                    <div class="p-3 bg-pink-50/70 border border-pink-100 rounded-2xl flex items-center justify-between gap-2 hover:border-pink-200 transition-all shadow-sm">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-1.5 mb-1">
+                                <span class="text-xs font-bold text-pink-600 truncate">${escapeHtml(item.title)}</span>
+                                <span class="text-[10px] text-pink-400 bg-white border border-pink-200 px-1.5 py-0.2 rounded-full font-mono flex-shrink-0">${item.lang === 'en' ? '🇺🇸' : '🇰🇷'}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-[11px] text-slate-500 font-mono">
+                                <span class="text-pink-500 font-bold"><i class="fa-solid fa-bolt text-[10px] text-pink-400"></i> ${item.cpm} CPM</span>
+                                <span class="text-pink-400">•</span>
+                                <span><i class="fa-solid fa-heart text-[10px] text-pink-400"></i> ${item.accuracy}%</span>
+                                <span class="text-pink-400">•</span>
+                                <span><i class="fa-regular fa-clock text-[10px] text-pink-400"></i> ${item.time}</span>
+                            </div>
+                            <span class="text-[10px] text-pink-300 font-sans block mt-0.5">${escapeHtml(dateStr)} (${item.charCount}자)</span>
+                        </div>
+                        <button onclick="deleteHistoryItem('${item.id}')" class="text-rose-300 hover:text-rose-500 w-7 h-7 rounded-xl hover:bg-rose-50 flex items-center justify-center text-xs transition-all flex-shrink-0" title="기록 삭제">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function closeHistoryModal() {
+            historyModal.classList.add('opacity-0', 'pointer-events-none');
+            historyModal.firstElementChild.classList.remove('scale-100');
+            historyModal.firstElementChild.classList.add('scale-95');
+        }
+
+        // ==========================================
+        // 7. 초기화 & 셀렉트 박스 바인딩
+        // ==========================================
+        function init() {
+            loadLanguage();
+            loadCategories();
+            loadFontSettings();
+            populateCategoriesSelect();
+            populatePresetItems();
+            if (presetItem.value) {
+                const opt = presetItem.options[presetItem.selectedIndex];
+                const title = opt ? (opt.dataset.title || opt.text) : "이야기 줄글";
+                setTargetText(presetItem.value, title);
+            }
+            setupEventListeners();
+        }
+
+        function populateCategoriesSelect() {
+            presetCategory.innerHTML = Object.keys(categories).map(key => 
+                `<option value="${key}">${escapeHtml(categories[key].name)}</option>`
+            ).join('');
+        }
+
+        function populatePresetItems() {
+            const catKey = presetCategory.value;
+            const catObj = categories[catKey];
+            const items = catObj ? catObj.items : [];
+
+            presetItem.innerHTML = items.map((item, idx) => {
+                let text = (currentLang === 'ko') ? (item.ko || "") : (item.en || item.ko || "");
+                let title = item.title || text.substring(0, 30);
+                const charLen = text.length;
+                return `<option value="${escapeHtml(text)}" data-title="${escapeHtml(title)}">${idx + 1}. ${escapeHtml(title)} (${charLen}자)</option>`;
+            }).join('');
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        // ==========================================
+        // 8. 이벤트 리스너 등록
+        // ==========================================
+        function setupEventListeners() {
+            // 언어 토글 버튼
+            btnLangToggle.addEventListener('click', toggleLanguage);
+
+            // 폰트 설정 모달
+            btnOpenFontModal.addEventListener('click', () => {
+                updateFontModalUI();
+                fontModal.classList.remove('opacity-0', 'pointer-events-none');
+                fontModal.firstElementChild.classList.remove('scale-95');
+                fontModal.firstElementChild.classList.add('scale-100');
+            });
+            btnCloseFontModal.addEventListener('click', closeFontModal);
+            btnSaveFont.addEventListener('click', () => {
+                saveFontSettings();
+                closeFontModal();
+            });
+
+            fontFamilyOptions.addEventListener('click', (e) => {
+                const btn = e.target.closest('.font-btn');
+                if (!btn) return;
+                applyFont(btn.dataset.font, currentFontSize);
+                updateFontModalUI();
+            });
+
+            fontSizeOptions.addEventListener('click', (e) => {
+                const btn = e.target.closest('.size-btn');
+                if (!btn) return;
+                applyFont(currentFontFamily, btn.dataset.size);
+                updateFontModalUI();
+            });
+
+            // 기록 모달
+            btnOpenHistoryModal.addEventListener('click', () => {
+                renderHistory();
+                historyModal.classList.remove('opacity-0', 'pointer-events-none');
+                historyModal.firstElementChild.classList.remove('scale-95');
+                historyModal.firstElementChild.classList.add('scale-100');
+            });
+            btnCloseHistoryModal.addEventListener('click', closeHistoryModal);
+            btnClearHistory.addEventListener('click', clearHistory);
+
+            // 카테고리 & 아이템 변경
+            presetCategory.addEventListener('change', () => {
+                populatePresetItems();
+                if (presetItem.value) {
+                    const opt = presetItem.options[presetItem.selectedIndex];
+                    const title = opt ? (opt.dataset.title || opt.text) : "이야기 줄글";
+                    setTargetText(presetItem.value, title);
+                }
+                resetPractice();
+            });
+
+            presetItem.addEventListener('change', () => {
+                if (presetItem.value) {
+                    const opt = presetItem.options[presetItem.selectedIndex];
+                    const title = opt ? (opt.dataset.title || opt.text) : "이야기 줄글";
+                    setTargetText(presetItem.value, title);
+                }
+                resetPractice();
+            });
+
+            // 효과음 토글
+            btnSoundToggle.addEventListener('click', () => {
+                soundEnabled = !soundEnabled;
+                if (soundEnabled) {
+                    soundIcon.className = "fa-solid fa-volume-high text-xs";
+                    btnSoundToggle.classList.replace('bg-slate-200', 'bg-pink-100');
+                } else {
+                    soundIcon.className = "fa-solid fa-volume-xmark text-xs";
+                    btnSoundToggle.classList.replace('bg-pink-100', 'bg-slate-200');
+                }
+            });
+
+            // 모드 전환
+            modeButtons.addEventListener('click', (e) => {
+                const button = e.target.closest('button');
+                if (!button) return;
+
+                const mode = button.dataset.mode;
+                Array.from(modeButtons.children).forEach(btn => {
+                    btn.classList.remove('bg-white', 'shadow-sm', 'text-pink-600');
+                    btn.classList.add('text-pink-400');
+                });
+                button.classList.add('bg-white', 'shadow-sm', 'text-pink-600');
+                button.classList.remove('text-pink-400');
+
+                sectionPreset.classList.add('hidden');
+                sectionCustom.classList.add('hidden');
+                sectionFile.classList.add('hidden');
+                sectionFile.classList.remove('flex');
+
+                if (mode === 'preset') {
+                    sectionPreset.classList.remove('hidden');
+                    if (presetItem.value) {
+                        const opt = presetItem.options[presetItem.selectedIndex];
+                        const title = opt ? (opt.dataset.title || opt.text) : "이야기 줄글";
+                        setTargetText(presetItem.value, title);
+                    }
+                } else if (mode === 'custom') {
+                    sectionCustom.classList.remove('hidden');
+                    if (customTextInput.value.trim()) {
+                        setTargetText(customTextInput.value.trim(), "직접 입력한 줄글");
+                    }
+                } else if (mode === 'file') {
+                    sectionFile.classList.remove('hidden');
+                    sectionFile.classList.add('flex');
+                    if (fileExtractedText.value.trim() && !fileExtractedArea.classList.contains('hidden')) {
+                        setTargetText(fileExtractedText.value.trim(), fileNameEl.textContent || "첨부 파일");
+                    }
+                }
+                resetPractice();
+            });
+
+            // 직접 입력 글자 수 카운팅 및 적용
+            customTextInput.addEventListener('input', () => {
+                customCharCount.textContent = `${customTextInput.value.length}자`;
+            });
+
+            btnApplyCustom.addEventListener('click', () => {
+                const text = customTextInput.value.trim();
+                if (text) {
+                    setTargetText(text, "직접 입력한 줄글");
+                    resetPractice();
+                } else {
+                    alert("연습할 텍스트를 입력해주세요.");
+                    customTextInput.focus();
+                }
+            });
+
+            // AI 처리 버튼
+            document.getElementById('btn-ai-process').addEventListener('click', processWithAI);
+
+            // 파일 첨부(PDF, TXT) 이벤트
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-pink-500', 'bg-pink-100/60');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-pink-500', 'bg-pink-100/60');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-pink-500', 'bg-pink-100/60');
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    handleFileUpload(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files.length > 0) {
+                    handleFileUpload(e.target.files[0]);
+                }
+            });
+
+            btnReuploadFile.addEventListener('click', () => {
+                fileInput.value = '';
+                dropZone.classList.remove('hidden');
+                fileExtractedArea.classList.add('hidden');
+                fileExtractedArea.classList.remove('flex');
+            });
+
+            fileExtractedText.addEventListener('input', () => {
+                fileCharCountEl.textContent = `${fileExtractedText.value.length}자`;
+            });
+
+            btnApplyFile.addEventListener('click', () => {
+                const text = fileExtractedText.value.trim();
+                if (text) {
+                    setTargetText(text, fileNameEl.textContent || "첨부 파일");
+                    resetPractice();
+                } else {
+                    alert("연습할 파일 내용이 없습니다.");
+                }
+            });
+
+            // 타이핑 포커스 및 인풋 이벤트
+            displayContainer.addEventListener('click', focusInput);
+            focusOverlay.addEventListener('click', focusInput);
+            hiddenInput.addEventListener('focus', () => focusOverlay.classList.add('opacity-0', 'pointer-events-none'));
+            hiddenInput.addEventListener('blur', () => {
+                if (!isCompleted) focusOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            });
+
+            hiddenInput.addEventListener('input', handleInput);
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    resetPractice();
+                } else if (e.key === 'Enter' && isCompleted) {
+                    e.preventDefault();
+                    goToNextItem();
+                }
+            });
+
+            btnRestart.addEventListener('click', resetPractice);
+            btnModalNext.addEventListener('click', () => {
+                goToNextItem();
+            });
+            btnModalRetry.addEventListener('click', () => {
+                clearAutoNextCountdown();
+                hideModal();
+                resetPractice();
+            });
+
+            // 카테고리 관리 모달
+            btnOpenCatModal.addEventListener('click', () => {
+                resetCategoryForm();
+                renderCategoryManagementList();
+                categoryModal.classList.remove('opacity-0', 'pointer-events-none');
+                categoryModal.firstElementChild.classList.remove('scale-95');
+                categoryModal.firstElementChild.classList.add('scale-100');
+            });
+
+            btnCloseCatModal.addEventListener('click', closeCategoryModal);
+
+            btnAddSentenceRow.addEventListener('click', () => {
+                const newRow = addSentenceRow();
+                newRow.querySelector('.sentence-input').focus();
+            });
+
+            btnCancelEditCategory.addEventListener('click', () => {
+                resetCategoryForm();
+            });
+
+            btnAddCategory.addEventListener('click', () => {
+                const title = newCatTitle.value.trim();
+                if (!title) {
+                    alert('카테고리 제목을 입력해주세요.');
+                    newCatTitle.focus();
+                    return;
+                }
+
+                const inputs = sentenceInputsContainer.querySelectorAll('.sentence-input');
+                const sentences = Array.from(inputs).map(i => i.value.trim()).filter(s => s.length > 0);
+
+                if (sentences.length === 0) {
+                    alert('최소 1개 이상의 이야기를 입력해주세요.');
+                    return;
+                }
+
+                const editKey = editingCatKey.value;
+                let targetKey = editKey;
+
+                if (editKey && categories[editKey]) {
+                    categories[editKey].name = title;
+                    categories[editKey].items = sentences;
+                    categories[editKey].custom = true;
+                    categories[editKey].lang = categories[editKey].lang || currentLang;
+                } else {
+                    targetKey = 'custom-' + Date.now();
+                    categories[targetKey] = {
+                        name: title,
+                        custom: true,
+                        lang: currentLang,
+                        items: sentences
+                    };
+                }
+
+                saveCategories();
+                populateCategoriesSelect();
+                presetCategory.value = targetKey;
+                populatePresetItems();
+
+                resetCategoryForm();
+                renderCategoryManagementList();
+                resetPractice();
+            });
+        }
+
+        // ==========================================
+        // 9. 카테고리 관리 서브 로직
+        // ==========================================
+        function addSentenceRow(initialText = '') {
+            const row = document.createElement('div');
+            row.className = 'flex items-start gap-1.5 sentence-row bg-white/70 p-2 rounded-2xl border border-pink-100 shadow-sm';
+            row.innerHTML = `
+                <span class="row-num text-[11px] font-mono text-pink-400 font-bold w-5 text-center flex-shrink-0 pt-2"></span>
+                <textarea rows="2" class="sentence-input flex-1 px-3 py-1.5 bg-white border border-pink-200 rounded-xl text-xs font-sans focus:outline-none focus:border-pink-400 placeholder:text-pink-300 resize-y" placeholder="이야기 줄글을 입력하세요"></textarea>
+                <button type="button" class="btn-remove-row text-rose-300 hover:text-rose-500 w-7 h-7 rounded-lg hover:bg-rose-50 flex items-center justify-center text-xs transition-all flex-shrink-0 mt-1" title="이 칸 삭제">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            `;
+            const input = row.querySelector('.sentence-input');
+            input.value = initialText;
+
+            row.querySelector('.btn-remove-row').addEventListener('click', () => {
+                row.remove();
+                updateSentenceRowNumbers();
+            });
+
+            sentenceInputsContainer.appendChild(row);
+            updateSentenceRowNumbers();
+            return row;
+        }
+
+        function updateSentenceRowNumbers() {
+            const rows = sentenceInputsContainer.querySelectorAll('.sentence-row');
+            rows.forEach((r, idx) => {
+                r.querySelector('.row-num').textContent = `${idx + 1}.`;
+            });
+            sentenceCountBadge.textContent = `${rows.length}개 이야기`;
+        }
+
+        function resetCategoryForm() {
+            editingCatKey.value = '';
+            catFormTitle.innerHTML = '<i class="fa-solid fa-pen-to-square text-pink-400"></i> 새 카테고리 추가';
+            btnSaveText.textContent = '카테고리 저장';
+            btnCancelEditCategory.classList.add('hidden');
+            newCatTitle.value = '';
+            sentenceInputsContainer.innerHTML = '';
+            addSentenceRow();
+            addSentenceRow();
+            addSentenceRow();
+        }
+
+        window.editCategory = function(key) {
+            const cat = categories[key];
+            if (!cat) return;
+
+            editingCatKey.value = key;
+            catFormTitle.innerHTML = '<i class="fa-solid fa-pen-nib text-pink-500"></i> 카테고리 수정';
+            btnSaveText.textContent = '수정 내용 저장';
+            btnCancelEditCategory.classList.remove('hidden');
+
+            newCatTitle.value = cat.name;
+            sentenceInputsContainer.innerHTML = '';
+            if (cat.items && cat.items.length > 0) {
+                cat.items.forEach(text => {
+                    const clean = typeof text === 'string' ? text : (text.text || '');
+                    addSentenceRow(clean);
+                });
+            } else {
+                addSentenceRow();
+            }
+            categoryModal.querySelector('.overflow-y-auto').scrollTo({ top: 0, behavior: 'smooth' });
+            newCatTitle.focus();
+        };
+
+        function closeCategoryModal() {
+            categoryModal.classList.add('opacity-0', 'pointer-events-none');
+            categoryModal.firstElementChild.classList.remove('scale-100');
+            categoryModal.firstElementChild.classList.add('scale-95');
+        }
+
+        function renderCategoryManagementList() {
+            customCategoryList.innerHTML = Object.keys(categories).map(key => {
+                const cat = categories[key];
+                const isCustom = cat.custom;
+                return `
+                    <div class="flex items-center justify-between p-3 bg-white border border-pink-100 rounded-xl shadow-sm hover:border-pink-200 transition-colors">
+                        <div class="flex-1 pr-2">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-xs font-bold text-pink-600 truncate block">${escapeHtml(cat.name)}</span>
+                                ${!isCustom ? '<span class="text-[9px] text-pink-400 bg-pink-50 border border-pink-200 px-1.5 py-0.5 rounded-full font-medium">기본</span>' : '<span class="text-[9px] text-pink-500 bg-pink-100 border border-pink-200 px-1.5 py-0.5 rounded-full font-bold">커스텀</span>'}
+                            </div>
+                            <span class="text-[11px] text-pink-300 font-sans">${cat.items.length}개의 이야기</span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button onclick="editCategory('${key}')" class="text-pink-600 hover:text-pink-700 hover:bg-pink-100 text-xs px-2.5 py-1 rounded-lg bg-pink-50 border border-pink-200 transition-colors flex items-center gap-1 font-bold">
+                                <i class="fa-solid fa-pen text-[10px]"></i> 수정
+                            </button>
+                            ${isCustom ? `
+                                <button onclick="deleteCategory('${key}')" class="text-rose-400 hover:text-rose-600 hover:bg-rose-100 text-xs px-2 py-1 rounded-lg bg-rose-50 border border-rose-100 transition-colors" title="삭제">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.deleteCategory = function(key) {
+            if (categories[key] && categories[key].custom) {
+                delete categories[key];
+                saveCategories();
+                populateCategoriesSelect();
+                populatePresetItems();
+                resetCategoryForm();
+                renderCategoryManagementList();
+                resetPractice();
+            }
+        };
+
+        // ==========================================
+        // 10. 파일 업로드 & 텍스트 추출 (PDF, TXT)
+        // ==========================================
+        async function handleFileUpload(file) {
+            if (!file) return;
+
+            fileNameEl.textContent = file.name;
+            dropZone.classList.add('hidden');
+            fileExtractedArea.classList.remove('hidden');
+            fileExtractedArea.classList.add('flex');
+            fileExtractedText.value = "파일에서 텍스트를 추출하는 중입니다... 잠시만 기다려주세요 ⏳";
+
+            try {
+                let extracted = "";
+                const lowerName = file.name.toLowerCase();
+
+                if (lowerName.endsWith('.pdf')) {
+                    if (!window.pdfjsLib) {
+                        throw new Error("PDF 파싱 라이브러리를 로드하지 못했습니다.");
+                    }
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    let pagesText = [];
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageStr = textContent.items.map(item => item.str).join(' ');
+                        if (pageStr.trim()) pagesText.push(pageStr.trim());
+                    }
+                    extracted = pagesText.join('\n\n');
+                } else {
+                    extracted = await file.text();
+                }
+
+                // PDF/TXT 텍스트 정제 함수
+                const cleanText = (text) => {
+                    return text
+                        // 1. 불필요한 특수문자/기호 제거 (문맥상 중요하지 않은 기호들)
+                        .replace(/[●■◆▲▶★✨🌸💖🎀☁️🌷]/g, '')
+                        // 2. 다중 공백/줄바꿈 정리
+                        .replace(/[ \t]+/g, ' ')
+                        .replace(/\n{3,}/g, '\n\n')
+                        // 3. 문장 끝 마침표 후 줄바꿈 유도 (가독성 향상)
+                        .replace(/(\.|\?|!)( +)/g, '$1\n')
+                        .trim();
+                };
+
+                // 파일 추출 후 적용
+                extracted = cleanText(extracted);
+
+                if (!extracted) {
+                    extracted = "파일에서 읽을 수 있는 텍스트를 찾을 수 없습니다.";
+                }
+
+                fileExtractedText.value = extracted;
+                fileCharCountEl.textContent = `${extracted.length}자`;
+            } catch (err) {
+                console.error("파일 추출 오류:", err);
+                fileExtractedText.value = "파일 텍스트 추출 중 오류가 발생했습니다: " + err.message;
+                fileCharCountEl.textContent = "0자";
+            }
+        }
+
+        // ==========================================
+        // 12. AI 어시스턴트 (파일 내용 정리)
+        // ==========================================
+        async function processWithAI() {
+            const rawText = fileExtractedText.value;
+            if (!rawText || rawText.length < 50) {
+                alert("정리할 내용이 너무 짧습니다.");
+                return;
+            }
+
+            // 시뮬레이션: 아주 간단한 규칙 기반 AI 로직
+            // 실제 API 연결이 없으므로, 문장을 자연스럽게 다듬는 로직을 적용
+            fileExtractedText.value = "AI가 내용을 분석하여 정리 중입니다... 🤖";
+
+            setTimeout(() => {
+                const cleaned = rawText
+                    .split('.')
+                    .map(sentence => sentence.trim())
+                    .filter(sentence => sentence.length > 5)
+                    .join('.\n\n');
+
+                fileExtractedText.value = "[AI 요약 및 정리본]\n\n" + cleaned;
+                fileCharCountEl.textContent = `${fileExtractedText.value.length}자`;
+            }, 1500);
+        }
+
+        // ==========================================
+        // 11. 타이핑 엔진 코어
+        // ==========================================
+        function focusInput() {
+            if (isCompleted) return;
+            hiddenInput.focus();
+        }
+
+        function setTargetText(text, title = "") {
+            targetText = text;
+            if (currentStoryTitle) {
+                if (!title) {
+                    const isPreset = modeButtons.querySelector('[data-mode="preset"]').classList.contains('bg-white');
+                    if (isPreset && presetItem.selectedIndex >= 0) {
+                        const opt = presetItem.options[presetItem.selectedIndex];
+                        title = opt ? (opt.dataset.title || opt.text) : "이야기 줄글";
+                    } else {
+                        title = "줄글 타이핑";
+                    }
+                }
+                currentStoryTitle.textContent = title;
+            }
+            if (currentStoryChars) {
+                currentStoryChars.textContent = `${text.length}자`;
+            }
+            renderDisplay();
+        }
+
+        function resetPractice() {
+            clearAutoNextCountdown();
+            clearInterval(timerInterval);
+            timerInterval = null;
+            startTime = null;
+            typedText = "";
+            hiddenInput.value = "";
+            isCompleted = false;
+            errorCount = 0;
+            lastLength = 0;
+
+            const isPresetMode = modeButtons.querySelector('[data-mode="preset"]').classList.contains('bg-white');
+            const isCustomMode = modeButtons.querySelector('[data-mode="custom"]').classList.contains('bg-white');
+            const isFileMode = modeButtons.querySelector('[data-mode="file"]').classList.contains('bg-white');
+
+            if (isPresetMode) {
+                if (presetItem.value) {
+                    const opt = presetItem.options[presetItem.selectedIndex];
+                    const title = opt ? (opt.dataset.title || opt.text) : "이야기";
+                    setTargetText(presetItem.value, title);
+                }
+            } else if (isCustomMode && customTextInput.value.trim()) {
+                setTargetText(customTextInput.value.trim(), "직접 입력한 줄글");
+            } else if (isFileMode && fileExtractedText.value.trim() && !fileExtractedArea.classList.contains('hidden')) {
+                setTargetText(fileExtractedText.value.trim(), fileNameEl.textContent || "첨부 파일");
+            }
+
+            renderDisplay();
+            updateStats(0, 0, 100);
+
+            progressBar.style.width = '0%';
+            detailProgress.textContent = '0%';
+            detailWpm.textContent = '0';
+            detailErrors.textContent = '0';
+            detailChars.textContent = `0 / ${targetText.length}`;
+
+            focusInput();
+        }
+
+        function handleInput(e) {
+            if (isCompleted) return;
+
+            const inputVal = hiddenInput.value;
+
+            if (inputVal.length > lastLength) {
+                const currentTypedChar = inputVal[inputVal.length - 1];
+                const expectedChar = targetText[inputVal.length - 1];
+                playKeySound(currentTypedChar !== expectedChar);
+            }
+            lastLength = inputVal.length;
+
+            if (!startTime && inputVal.length > 0) {
+                startTime = new Date();
+                timerInterval = setInterval(updateTimer, 100);
+            }
+
+            typedText = inputVal;
+
+            let currentErrors = 0;
+            for (let i = 0; i < typedText.length; i++) {
+                if (typedText[i] !== targetText[i]) {
+                    currentErrors++;
+                }
+            }
+            errorCount = currentErrors;
+
+            renderDisplay();
+            calculateAndDisplayStats();
+
+            if (typedText.length >= targetText.length) {
+                completePractice();
+            }
+        }
+
+        function renderDisplay() {
+            let html = "";
+            const currentIdx = typedText.length;
+
+            for (let i = 0; i < targetText.length; i++) {
+                const char = targetText[i];
+                const isNewline = char === '\n';
+                const isSpace = char === ' ';
+
+                let displayChar = escapeHtml(char);
+                if (isNewline) {
+                    displayChar = '↵';
+                } else if (isSpace) {
+                    displayChar = '&nbsp;';
+                }
+
+                let extraClasses = isNewline ? " font-sans text-xs px-1 opacity-70" : "";
+
+                if (i < currentIdx) {
+                    if (typedText[i] === char) {
+                        html += `<span data-idx="${i}" class="char-box text-pink-600 bg-pink-100/90${extraClasses}">${displayChar}</span>`;
+                    } else {
+                        html += `<span data-idx="${i}" class="char-box text-rose-600 bg-rose-200/90 font-bold underline underline-offset-2 decoration-rose-500${extraClasses}">${displayChar}</span>`;
+                    }
+                } else if (i === currentIdx) {
+                    html += `<span data-idx="${i}" class="char-box caret-pink${extraClasses}">${displayChar}</span>`;
+                } else {
+                    html += `<span data-idx="${i}" class="char-box text-pink-300/80${extraClasses}">${displayChar}</span>`;
+                }
+
+                if (isNewline) {
+                    html += '<br>';
+                }
+            }
+
+            typingDisplay.innerHTML = html;
+
+            const activeElem = typingDisplay.querySelector(`[data-idx="${currentIdx}"]`);
+            if (activeElem) {
+                activeElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function updateTimer() {
+            if (!startTime) return;
+            calculateAndDisplayStats();
+        }
+
+        function calculateAndDisplayStats() {
+            if (!startTime) return;
+
+            const now = new Date();
+            const elapsedSeconds = Math.max((now - startTime) / 1000, 0.1);
+
+            const typedChars = typedText.length;
+            const cpm = Math.round((typedChars / elapsedSeconds) * 60);
+            const wpm = Math.round((typedChars / 5) / (elapsedSeconds / 60));
+
+            let accuracy = 100;
+            if (typedChars > 0) {
+                const correctChars = typedChars - errorCount;
+                accuracy = Math.max(0, Math.round((correctChars / typedChars) * 100));
+            }
+
+            const progress = Math.min(100, Math.round((typedChars / targetText.length) * 100));
+
+            updateStats(elapsedSeconds, cpm, accuracy, wpm, progress, typedChars);
+        }
+
+        function updateStats(seconds, cpm, accuracy, wpm = 0, progress = 0, typedChars = 0) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+            const timeStr = `${mins}:${secs}`;
+
+            statTime.textContent = timeStr;
+            detailTime.textContent = timeStr;
+
+            statCpm.textContent = `${cpm} CPM`;
+            statAccuracy.textContent = `${accuracy}%`;
+
+            progressBar.style.width = `${progress}%`;
+            detailProgress.textContent = `${progress}%`;
+            detailWpm.textContent = `${wpm}`;
+            detailErrors.textContent = `${errorCount}`;
+            detailChars.textContent = `${typedChars} / ${targetText.length}`;
+        }
+
+        function completePractice() {
+            isCompleted = true;
+            clearInterval(timerInterval);
+            hiddenInput.blur();
+
+            const now = new Date();
+            const elapsedSeconds = Math.max((now - startTime) / 1000, 0.1);
+            const cpm = Math.round((typedText.length / elapsedSeconds) * 60);
+            const wpm = Math.round((typedText.length / 5) / (elapsedSeconds / 60));
+            
+            const correctChars = typedText.length - errorCount;
+            const accuracy = Math.max(0, Math.round((correctChars / typedText.length) * 100));
+
+            const mins = Math.floor(elapsedSeconds / 60).toString().padStart(2, '0');
+            const secs = Math.floor(elapsedSeconds % 60).toString().padStart(2, '0');
+            const timeStr = `${mins}:${secs}`;
+
+            document.getElementById('result-cpm').textContent = cpm;
+            document.getElementById('result-wpm').textContent = wpm;
+            document.getElementById('result-accuracy').textContent = `${accuracy}%`;
+            document.getElementById('result-time').textContent = timeStr;
+
+            // 연습 기록 저장
+            const entry = {
+                id: 'hist-' + Date.now(),
+                title: currentStoryTitle ? currentStoryTitle.textContent : "이야기 줄글",
+                cpm: cpm,
+                wpm: wpm,
+                accuracy: accuracy,
+                time: timeStr,
+                charCount: typedText.length,
+                date: new Date().toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                lang: currentLang
+            };
+            saveHistoryEntry(entry);
+
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#FF69B4', '#FFB6C1', '#FFE4E1', '#E9D5FF', '#FFF0F5']
+                });
+            }
+
+            showModal();
+            startAutoNextCountdown();
+        }
+
+        function startAutoNextCountdown() {
+            clearAutoNextCountdown();
+
+            let timeLeft = 2;
+            if (autoNextCountdownEl) {
+                autoNextCountdownEl.textContent = `${timeLeft}초 후 다음 글로 자동 이동...`;
+            }
+
+            autoNextCountdownInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    if (autoNextCountdownEl) autoNextCountdownEl.textContent = `${timeLeft}초 후 다음 글로 자동 이동...`;
+                } else {
+                    clearInterval(autoNextCountdownInterval);
+                }
+            }, 1000);
+
+            autoNextTimeout = setTimeout(() => {
+                goToNextItem();
+            }, 2000);
+        }
+
+        function clearAutoNextCountdown() {
+            if (autoNextTimeout) clearTimeout(autoNextTimeout);
+            if (autoNextCountdownInterval) clearInterval(autoNextCountdownInterval);
+            autoNextTimeout = null;
+            autoNextCountdownInterval = null;
+        }
+
+        function goToNextItem() {
+            clearAutoNextCountdown();
+            hideModal();
+
+            const isPresetMode = modeButtons.querySelector('[data-mode="preset"]').classList.contains('bg-white');
+            if (isPresetMode && presetItem.options.length > 0) {
+                presetItem.selectedIndex = (presetItem.selectedIndex + 1) % presetItem.options.length;
+                const opt = presetItem.options[presetItem.selectedIndex];
+                const title = opt ? (opt.dataset.title || opt.text) : "이야기";
+                setTargetText(presetItem.value, title);
+            }
+            resetPractice();
+        }
+
+        function showModal() {
+            resultModal.classList.remove('opacity-0', 'pointer-events-none');
+            resultCard.classList.remove('scale-90');
+            resultCard.classList.add('scale-100');
+        }
+
+        function hideModal() {
+            resultModal.classList.add('opacity-0', 'pointer-events-none');
+            resultCard.classList.remove('scale-100');
+            resultCard.classList.add('scale-90');
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
